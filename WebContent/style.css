@@ -3,7 +3,7 @@
 body {
 	margin: 0;
 	padding: 0;
-	background: #f4f4f4;
+	background: #fcfcfc;
 	font: 14px;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
@@ -17,7 +17,11 @@ body {
 	-webkit-box-shadow: 0px 0px 8px 2px #d1d1d1;
 	-moz-box-shadow: 0px 0px 8px 2px #d1d1d1;
 	box-shadow: 0px 0px 8px 2px #d1d1d1; 
-	padding: 20px;
+	border:1px solid #a1a1a1;
+	padding:10px 40px; 
+	border-radius:10px;
+	-moz-border-radius:10px; /* Old Firefox */
+	background: #f4f4f4;
 }
 
 p {
@@ -211,28 +215,45 @@ p {
 }
 
 #navigation-bar {
-top: 0;
-width: 100%;
-color: #ffffff;
-height: 35px;
-text-align: center;
-padding-top: 15px;
-/* Adds shadow to the bottom of the bar */
--webkit-box-shadow: 0px 0px 8px 0px #111111;
--moz-box-shadow: 0px 0px 8px 0px #111111;
-box-shadow: 0px 0px 8px 0px #111111;
-/* Adds the transparent background */
-background-color: rgba(1, 1, 1, 0.8);
-color: rgba(1, 1, 1, 0.8);
+	top: 0;
+	width: 100%;
+	color: #ffffff;
+	height: 35px;
+	text-align: center;
+	padding-top: 15px;
+	/* Adds shadow to the bottom of the bar */
+	-webkit-box-shadow: 0px 0px 8px 0px #111111;
+	-moz-box-shadow: 0px 0px 8px 0px #111111;
+	box-shadow: 0px 0px 8px 0px #111111;
+	/* Adds the transparent background */
+	background-color: rgba(1, 1, 1, 0.8);
+	color: rgba(1, 1, 1, 0.8);
 }
 #navigation-bar a {
-font-size: 14px;
-padding-left: 15px;
-padding-right: 15px;
-color: white;
-text-decoration: none;
+	font-size: 14px;
+	padding-left: 15px;
+	padding-right: 15px;
+	color: white;
+	text-decoration: none;
 }
 
 #navigation-bar a:hover {
-color: orange;
-} 
+	color: orange;
+}
+
+/* ------Messages------ */
+.messageContainer {
+	margin: auto;
+	-webkit-box-shadow: 0px 0px 8px 2px #d1d1d1;
+	-moz-box-shadow: 0px 0px 8px 2px #d1d1d1;
+	box-shadow: 0px 0px 8px 2px #d1d1d1; 
+	border: 1px solid #a1a1a1;
+	padding: 10px ; 
+	border-radius: 10px;
+	-moz-border-radius: 10px; /* Old Firefox */
+}
+
+.timeAgo:c:out {
+	font-size: 8px;
+	color: #eeeeee;
+}

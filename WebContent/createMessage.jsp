@@ -12,7 +12,7 @@
 	<div class="wrapper">
 
 		<!-- Navigation Bar -->
-		<jsp:include page="nav-bar.html" />
+		<jsp:include page="/nav-bar.jsp" />
 		
 		<!-- content -->
 	
@@ -23,7 +23,7 @@
 		
 		<p>
 			<!-- Possibly display success message -->
-			<jsp:scriptlet> String message = (String)request.getAttribute("success");
+			<jsp:scriptlet> String message = (String)request.getAttribute("successMessage");
 				if (message != null)
 					out.println(message);
 			</jsp:scriptlet>

@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class Message 
 {
 	private Timestamp timeStamp;
-	private String postingUser;
+	private User author;
 	private String content;
 
 	public Message()
@@ -20,12 +20,12 @@ public class Message
 		this.timeStamp = timeStamp;
 	}
 
-	public String getPostingUser() {
-		return postingUser;
+	public User getAuthor() {
+		return author;
 	}
 
-	public void setPostingUser(String postingUser) {
-		this.postingUser = postingUser;
+	public void setAuthor(User author) {
+		this.author = author;
 	}
 
 	public String getContent() {

@@ -15,7 +15,7 @@
 	<div class="wrapper">
 
 		<!-- Navigation Bar -->
-		<jsp:include page="nav-bar.html" />
+		<jsp:include page="/nav-bar.jsp" />
 		
 		<!--  content -->
 		<h1>Login Successful!</h1>

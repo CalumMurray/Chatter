@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import chatter.model.Message;
+import chatter.model.User;
 
 import com.mysql.jdbc.PreparedStatement;
 import java.sql.Timestamp;
@@ -61,7 +62,7 @@ public class MessageService extends DatabaseConnector
 
 	}
 	
-	public List<Message> getUserMessages(String userEmail)
+	public List<Message> getUserMessages(User user)
 	{
 		//TODO: Save Message bean as field to return?
 		
@@ -75,7 +76,7 @@ public class MessageService extends DatabaseConnector
 			//Prepare Statement
 			preparedString = "SELECT timestamp,user,content FROM messages WHERE messages.user = ?;";
 			preparedQuery = (PreparedStatement) connection.prepareStatement(preparedString);
-			preparedQuery.setString(1, "users." + userEmail);
+			preparedQuery.setString(1, user.getEmail());
 			
 			//TODO: Remove debug
 			System.out.println("Get user with SQL:  [" + preparedQuery.toString() + "] ");
@@ -92,7 +93,7 @@ public class MessageService extends DatabaseConnector
 				Message newMessage = new Message();
 				
 				newMessage.setTimeStamp(resultSet.getTimestamp("timestamp"));
-				newMessage.setPostingUser(resultSet.getString("user"));
+				newMessage.setAuthor(user);
 				newMessage.setContent(resultSet.getString("content"));
 				
 				messageList.add(newMessage);

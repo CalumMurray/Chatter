@@ -4,8 +4,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/style.css" />
-<title>Goodbye</title>
+<title>Chatter: Add Friend</title>
+
+<!--  TODO: AJAX here -->
+
+
 </head>
 <body>
 
@@ -13,12 +16,14 @@
 	
 <!-- Navigation Bar -->
 		<jsp:include page="/nav-bar.jsp" />
-	
-		<h1> Successfully Logged Out. </h1>
-		<h2>Come back soon </h2>
+
+		<form name="friendForm" method="post" action="${pageContext.request.contextPath}/add/friend">
+			<input class="inputcontent" type="text" name="friend" value="Type friend's name or email..." />
+			<input class="orangebutton" type="submit" value="Add" />
+		</form>
+
 
 	</div>
-
-
+	
 </body>
 </html>

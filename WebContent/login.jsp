@@ -46,7 +46,7 @@ function validateLogin()
 	<div class="wrapper">
 	
 <!-- Navigation Bar -->
-		<jsp:include page="nav-bar.html" />
+		<jsp:include page="/nav-bar.jsp" />
 	
 
 <!--  Login form -->

@@ -11,40 +11,35 @@ import javax.servlet.http.HttpServletResponse;
 
 import chatter.model.Message;
 import chatter.model.User;
+import chatter.service.FriendService;
 import chatter.service.MessageService;
 
 /**
- * Servlet implementation class ReadMessageServlet
+ * Servlet implementation class AddFriendServlet
  */
-@WebServlet({ "/read/message", "/read/message/*" })
-public class ReadMessageServlet extends HttpServlet 
+@WebServlet("/add/friend")
+public class AddFriendServlet extends HttpServlet 
 {
-	private static final long serialVersionUID = 1L;
 	private User user;
-	private List<Message> userMessages;
-	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
+			//Check is user is logged in for session
 		user = (User) request.getSession().getAttribute("user");
-		System.out.println("User: " + user);
-		//Check is user is logged in for session
 		if (user == null)
 		{
 			response.sendRedirect("../login");	//Not logged in yet - redirect to login page
 			return;
 		}
 		else
-		{	//Logged in
-			MessageService messageService = new MessageService();
-			userMessages = (List<Message>) messageService.getUserMessages(user);
-			request.getSession().setAttribute("userMessages", userMessages);	//TODO Session or just Page scope?
-			request.getRequestDispatcher("../readMessage.jsp").forward(request, response);
+		{	
+			request.getRequestDispatcher("../addFriend.jsp").forward(request, response);
 			return;
 		}
-		
 	}
 
 	/**
@@ -52,7 +47,11 @@ public class ReadMessageServlet extends HttpServlet
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		// TODO Auto-generated method stub
+		String friendToAdd = (String) request.getAttribute("friend");
+		
+		FriendService friendService = new FriendService();
+		User newFriend = friendService.findFriend(friendToAdd);
+		
 	}
 
 }
