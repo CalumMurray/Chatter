@@ -16,8 +16,10 @@ import chatter.service.MessageService;
 @WebServlet("/create/message")
 public class CreateMessageServlet extends HttpServlet 
 {
-	User user;
 	private static final long serialVersionUID = 1L;
+	
+	private User user;
+	private MessageService messageService = new MessageService();
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -50,10 +52,9 @@ public class CreateMessageServlet extends HttpServlet
 		//TODO: Add submitted chat message to database
 		
 		String messageContent = request.getParameter("message");
-		String posterEmail = (String)((User) request.getSession().getAttribute("user")).getEmail();
+		String authorEmail = (String)((User) request.getSession().getAttribute("user")).getEmail();
 		
-		MessageService messageService = new MessageService();
-		messageService.postMessage(posterEmail, messageContent);
+		messageService.postMessage(authorEmail, messageContent);
 		
 		//Return to createMessage.jsp with success message
 		request.setAttribute("successMessage", "Chat posted Successfully!");

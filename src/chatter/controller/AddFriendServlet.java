@@ -3,24 +3,26 @@ package chatter.controller;
 import java.io.IOException;
 import java.util.List;
 
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import chatter.model.Message;
+
 import chatter.model.User;
 import chatter.service.FriendService;
-import chatter.service.MessageService;
 
 /**
  * Servlet implementation class AddFriendServlet
  */
-@WebServlet("/add/friend")
+@WebServlet({"/add/friend", "/add/friend/*"})
 public class AddFriendServlet extends HttpServlet 
 {
 	private User user;
+	FriendService friendService = new FriendService();
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -37,8 +39,32 @@ public class AddFriendServlet extends HttpServlet
 		}
 		else
 		{	
-			request.getRequestDispatcher("../addFriend.jsp").forward(request, response);
-			return;
+			//Add specific friend from URI?
+			String requestURI = request.getRequestURI();
+			
+			if (requestURI.equals(request.getContextPath() + "/add/friend"))
+			{
+				System.out.println("RequestURI: " + requestURI);
+				System.out.println("Context path: " + request.getContextPath() + " + /add/friend");
+				//There is not a specific friend to add
+				request.getRequestDispatcher("../addFriend.jsp").forward(request, response);
+				return;
+			}
+			else
+			{
+				
+				//There is a specific friend to add...
+				
+				//Extract friends email from url
+				int lastSeparator = requestURI.lastIndexOf('/');
+				String friendToAdd = requestURI.substring(lastSeparator + 1);
+				
+				friendService.addFriend(user.getEmail(), friendToAdd);
+				
+				request.setAttribute("message", "Friend " + friendToAdd + " successfully added.");
+				request.getRequestDispatcher("../addFriend.jsp").forward(request, response);
+				return;
+			}
 		}
 	}
 
@@ -47,11 +73,30 @@ public class AddFriendServlet extends HttpServlet
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		String friendToAdd = (String) request.getAttribute("friend");
+		String friendToAdd = (String) request.getParameter("friend");
 		
-		FriendService friendService = new FriendService();
-		User newFriend = friendService.findFriend(friendToAdd);
 		
+		List<User> possibleFriends = (List<User>) friendService.findFriend(friendToAdd);
+		
+		if (possibleFriends == null || possibleFriends.size() == 0)
+		{
+			//Failure - no such friend
+			request.setAttribute("message", "No such user exists");
+		}
+		else if (possibleFriends.size() > 1)
+		{
+			//show possibilities
+			request.setAttribute("possibleFriends", possibleFriends);
+			
+		}
+		else if (possibleFriends.size() == 1)
+		{			
+			//Add single friend
+			friendService.addFriend(user.getEmail(), possibleFriends.get(0).getEmail());
+			request.setAttribute("message", "Friend " + possibleFriends.get(0).getFirstName() + " Added Successfully.");
+		}
+		
+		request.getRequestDispatcher("../addFriend.jsp").forward(request, response);
 	}
 
 }

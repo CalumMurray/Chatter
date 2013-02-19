@@ -1,0 +1,1 @@
+Twitter Clone. Uses JSP and MySQL, implemented with a RESTful and MVC architecture.

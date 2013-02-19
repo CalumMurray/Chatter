@@ -24,6 +24,7 @@ public class LoginServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	
+	private LoginService loginService = new LoginService();
 
 	
 	/**
@@ -57,9 +58,8 @@ public class LoginServlet extends HttpServlet
 		}	
 		
 		//Authenticate login
-		LoginService loginService = new LoginService();
 		boolean authenticated = loginService.authenticate(email, hashedPass);
-			System.out.println("Authenticated:  " + (authenticated ? "true" : "false"));
+		System.out.println("Authenticated:  " + (authenticated ? "true" : "false"));
 		
 		//If logged in correctly
 		if (authenticated)
@@ -80,7 +80,7 @@ public class LoginServlet extends HttpServlet
 		{
 			//if incorrect login, return to login page with message
 			request.setAttribute("message", "Invalid Username or Password.");
-			request.getRequestDispatcher("login.jsp").forward(request, response);
+			request.getRequestDispatcher("login.jsp?credentials=bad").forward(request, response);
 			return;
 		}
 		

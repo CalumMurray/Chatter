@@ -1,6 +1,7 @@
 package chatter.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,7 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import chatter.model.Message;
 import chatter.model.User;
+import chatter.service.FriendService;
+import chatter.service.MessageService;
 
 /**
  * Servlet implementation class ProfileServlet
@@ -16,9 +20,13 @@ import chatter.model.User;
 @WebServlet({ "/profile", "/profile/*" })
 public class ProfileServlet extends HttpServlet 
 {
-	private	User user;
+	
 	private static final long serialVersionUID = 1L;
-
+	
+	private MessageService messageService = new MessageService();
+	private	User user;
+	
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -35,8 +43,13 @@ public class ProfileServlet extends HttpServlet
 		else
 		{
 			//Otherwise show this page
-			//View from corresponding profile.jsp
-			request.getRequestDispatcher("profile.jsp").forward(request, response);
+			
+			//TODO: Check null for attributes before fetching them again?
+			
+			
+			request.getSession().setAttribute("following", countFriends());
+			request.getSession().setAttribute("userMessages", getMessages(request));
+			request.getRequestDispatcher("profile.jsp").forward(request, response);	//View from corresponding profile.jsp
 			return;
 		}
 	}
@@ -46,7 +59,30 @@ public class ProfileServlet extends HttpServlet
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// TODO Auto-generated method stub
+		String messageContent = request.getParameter("message");
+		String posterEmail = (String)((User) request.getSession().getAttribute("user")).getEmail();
+		
+		messageService.postMessage(posterEmail, messageContent);
+		
+		//Return to createMessage.jsp with success message
+		request.setAttribute("successMessage", "Chat posted Successfully!");
+		request.getRequestDispatcher("profile.jsp").forward(request, response);
 	}
 
+	
+	private List<Message> getMessages(HttpServletRequest request)
+	{
+		MessageService messageService = new MessageService();
+		return (List<Message>) messageService.fetchUserFriendMessages(user);
+		
+
+	}
+	
+	private int countFriends()
+	{
+		FriendService friendService = new FriendService();
+		List<User> friends = (List<User>) friendService.getFriends(user.getEmail());
+		return friends.size();
+		
+	}
 }

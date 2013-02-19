@@ -20,7 +20,7 @@ public class RegisterServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 
-
+	private RegisterService regService = new RegisterService();
 	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -43,7 +43,6 @@ public class RegisterServlet extends HttpServlet
 		String password = request.getParameter("password");
 	
 	
-		RegisterService regService = new RegisterService();
 		//Check database for duplicate email, i.e. account already exists
 		boolean duplicateExists = regService.checkEmail(email);
 		if (duplicateExists)

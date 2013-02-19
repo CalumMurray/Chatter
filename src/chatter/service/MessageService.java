@@ -41,8 +41,7 @@ public class MessageService extends DatabaseConnector
     	}
     	catch(Exception ex)
     	{
-			System.out.println("Problem executing SQL Query [" + preparedQuery.toString() + "] in MessageService.java");
-    		ex.printStackTrace();
+			ex.printStackTrace();
   
     	}
     	finally
@@ -62,7 +61,7 @@ public class MessageService extends DatabaseConnector
 
 	}
 	
-	public List<Message> getUserMessages(User user)
+	public List<Message> fetchUserFriendMessages(User user)
 	{
 		//TODO: Save Message bean as field to return?
 		
@@ -73,10 +72,26 @@ public class MessageService extends DatabaseConnector
 		List<Message> messageList = null;
 		try 
 		{
+			
+			/* Union query produces a list of email addresses - 
+		       the person you're looking for plus all his friends
+		       Starts with string literal for the main user
+		    */
 			//Prepare Statement
-			preparedString = "SELECT timestamp,user,content FROM messages WHERE messages.user = ?;";
+			preparedString = "SELECT `timestamp`,  user,  firstname,  lastname,  content " +	/* First part of the UNION returns friends messages */
+					          "FROM " +
+					          "messages " +
+					          "INNER JOIN " +
+					          "(SELECT ? AS email " +	//Union query produces a list of email addresses - 
+					          							//the person you're looking for plus all his friends
+					          							//Starts with string literal for the main user
+					          "UNION " +
+					          "SELECT friend AS email FROM friends WHERE email = ?) user_and_friends ON messages.user = user_and_friends.email " + /* Plus all his friends into one list joined against messages */
+					          "INNER JOIN users ON user_and_friends.email = users.email " +	/* Join against the users table for name info */
+					          "ORDER BY `timestamp` DESC;";
 			preparedQuery = (PreparedStatement) connection.prepareStatement(preparedString);
 			preparedQuery.setString(1, user.getEmail());
+			preparedQuery.setString(2, user.getEmail());
 			
 			//TODO: Remove debug
 			System.out.println("Get user with SQL:  [" + preparedQuery.toString() + "] ");
@@ -93,8 +108,15 @@ public class MessageService extends DatabaseConnector
 				Message newMessage = new Message();
 				
 				newMessage.setTimeStamp(resultSet.getTimestamp("timestamp"));
-				newMessage.setAuthor(user);
 				newMessage.setContent(resultSet.getString("content"));
+				
+				//Get author as User object
+				User author = new User();
+				author.setEmail(resultSet.getString("user"));
+				author.setFirstName(resultSet.getString("firstname"));
+				author.setLastName(resultSet.getString("lastname"));
+				
+				newMessage.setAuthor(author);
 				
 				messageList.add(newMessage);
 
@@ -105,8 +127,61 @@ public class MessageService extends DatabaseConnector
 		{
 			e.printStackTrace();
 		}
+		finally
+    	{
+    		try
+    		{
+    			//Finally close stuff to return connection to pool for reuse
+        		preparedQuery.close();
+        		connection.close();
+    		}
+    		catch (SQLException sqle)
+    		{
+    			sqle.printStackTrace();
+    		}
+
+    	}
 		return messageList;		
 	}
 	
+	public void deleteMessage(Timestamp messageToDelete)
+	{
+		initConnection("jdbc/chatter");
+		
+		String preparedString = null;
+		PreparedStatement preparedQuery = null;
+		
+		try
+		{
+			//Prepare Statement
+			preparedString = "DELETE FROM messages WHERE `timestamp` = ?;";
+			preparedQuery = (PreparedStatement) connection.prepareStatement(preparedString);
+			preparedQuery.setTimestamp(1, messageToDelete);
+			
+			//Execute DELETE statement
+			preparedQuery.executeUpdate();
+			
+			//TODO: Remove debug
+			System.out.println("Executing  [" + preparedQuery.toString() + "] ");
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+    	{
+    		try
+    		{
+    			//Finally close stuff to return connection to pool for reuse
+        		preparedQuery.close();
+        		connection.close();
+    		}
+    		catch (SQLException sqle)
+    		{
+    			sqle.printStackTrace();
+    		}
+
+    	}
+	}
 	
 }

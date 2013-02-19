@@ -106,6 +106,20 @@ public class LoginService extends DatabaseConnector
 		{
 			e.printStackTrace();
 		}
+		finally
+    	{
+    		try
+    		{
+    			//Finally close stuff to return connection to pool for reuse
+        		preparedQuery.close();
+        		connection.close();
+    		}
+    		catch (SQLException sqle)
+    		{
+    			sqle.printStackTrace();
+    		}
+
+    	}
 		return user;
 	}
 	

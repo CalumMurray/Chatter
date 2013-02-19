@@ -53,11 +53,6 @@ public class FriendService extends DatabaseConnector
 			//Execute Statement
 			ResultSet resultSet = preparedQuery.executeQuery();  	
 			
-			//No user by search terms
-			if (!resultSet.first())
-				return null;
-			
-			
 			//Extract users into Bean List
 			while (resultSet.next())
 			{
@@ -77,6 +72,20 @@ public class FriendService extends DatabaseConnector
 		{
 			e.printStackTrace();
 		}
+		finally
+    	{
+    		try
+    		{
+    			//Finally close stuff to return connection to pool for reuse
+        		preparedQuery.close();
+        		connection.close();
+    		}
+    		catch (SQLException sqle)
+    		{
+    			sqle.printStackTrace();
+    		}
+
+    	}
 		return userList;		
 	}
 
@@ -106,6 +115,20 @@ public class FriendService extends DatabaseConnector
 		{
 			e.printStackTrace();
 		}
+		finally
+    	{
+    		try
+    		{
+    			//Finally close stuff to return connection to pool for reuse
+        		preparedQuery.close();
+        		connection.close();
+    		}
+    		catch (SQLException sqle)
+    		{
+    			sqle.printStackTrace();
+    		}
+
+    	}
 	}
 	
 	public List<User> getFriends(String userEmail)
@@ -149,6 +172,20 @@ public class FriendService extends DatabaseConnector
 		{
 			e.printStackTrace();
 		}
+		finally
+    	{
+    		try
+    		{
+    			//Finally close stuff to return connection to pool for reuse
+        		preparedQuery.close();
+        		connection.close();
+    		}
+    		catch (SQLException sqle)
+    		{
+    			sqle.printStackTrace();
+    		}
+
+    	}
 		return friendsList;
 	}
 	

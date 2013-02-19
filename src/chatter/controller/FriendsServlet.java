@@ -1,52 +1,46 @@
 package chatter.controller;
 
 import java.io.IOException;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import chatter.model.Message;
+import java.util.List;
+
 import chatter.model.User;
-import chatter.service.MessageService;
+import chatter.service.FriendService;
 
 /**
- * Servlet implementation class ReadMessageServlet
+ * Servlet implementation class FriendsServlet
  */
-@WebServlet({ "/messages", "/messages/*" })
-public class ReadMessageServlet extends HttpServlet 
+@WebServlet({ "/friends", "/friends/*" })
+public class FriendsServlet extends HttpServlet 
 {
-	private static final long serialVersionUID = 1L;
-	
-	private MessageService messageService = new MessageService();
+	private FriendService friendService = new FriendService();
 	private User user;
-	private List<Message> userMessages;
-	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		user = (User) request.getSession().getAttribute("user");
-		System.out.println("User: " + user);
 		//Check is user is logged in for session
+		user = (User) request.getSession().getAttribute("user");
 		if (user == null)
 		{
-			response.sendRedirect("../login");	//Not logged in yet - redirect to login page
+			response.sendRedirect("login");	//Not logged in yet - redirect to login page
 			return;
 		}
 		else
-		{	//Logged in
-			
-			userMessages = (List<Message>) messageService.fetchUserFriendMessages(user);
-			request.getSession().setAttribute("userMessages", userMessages);	//TODO Session or just Page scope?
-			request.getRequestDispatcher("/readMessage.jsp").forward(request, response);
+		{	
+			List<User> friends = friendService.getFriends(user.getEmail());
+			request.getSession().setAttribute("friends", friends);
+			request.getRequestDispatcher("friends.jsp").forward(request, response);
 			return;
 		}
-		
 	}
 
 	/**

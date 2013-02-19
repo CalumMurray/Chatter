@@ -1,39 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Login</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/style.css" />
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css" />
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,400italic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script><!-- JQuery CDN -->
+<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script><!-- JQueryUI CDN -->
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" /><!-- JQueryUI CSS -->
 
 
-<!-- JQuery CDN -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
-</script>
 
-<script> 
-$(document).ready(function(){
-  $("button").click(function(){
-    $("input").hide();
-  });
-});
-</script> 
 
 <script>
 function validateLogin()
 {
 	//TODO: Move to external reusable .js script file	
 	var email=document.forms["loginForm"]["email"].value;
-	
+	var filter=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 	if ( email == "")
 	{
 		alert("Certain fields are missing.");
 		return false;
 	}
-	/*else if ()
-		//TODO: Check email matches regular expression*/
+	if (!filter.test(email))
+	{
+		alert("Malformed Email Address.");
+		return false;
+	}
 	return true;
 
 }
@@ -43,61 +44,65 @@ function validateLogin()
 
 <body>
 
-	<div class="wrapper">
-	
-<!-- Navigation Bar -->
-		<jsp:include page="/nav-bar.jsp" />
-	
 
+	<jsp:include page="/top-right.jsp" />
+
+	<div id="bannerText">
+		<h1>Chatter</h1>
+	</div>
 <!--  Login form -->
 
 
-		<form class="myForm" action="${pageContext.request.contextPath}/login" method="post" onsubmit="return validateLogin()" name="loginForm">
+	<form class="myForm" action="${pageContext.request.contextPath}/login" method="post" onsubmit="return validateLogin()" name="loginForm">
 
-			<div class="formtitle">Login to your account</div>
-			
-			<div class="input">
-				<div class="inputtext">Email: </div>
-				<div class="inputcontent">
-
-					<input type="text" name="email" value="${user.email}" />
-
-				</div>
-			</div>
-
-			<div class="input nobottomborder">
-				<div class="inputtext">Password: </div>
-				<div class="inputcontent">
-
-					<input type="password" name="password" />
-					<br/>
-					<a href="#">Forgot password?</a>
-
-				</div>
-			</div>
-
-			<div class="buttons">
-
-				<input class="orangebutton" type="submit" value="Login" />
-
-				<input class="greybutton" type="submit" value="Cancel" />
-
-			</div>
-
-		</form>
-		<!-- End Login Form -->
+		<div class="formtitle">Login to your account</div>
 		
-		<p> Not a member? <a href="${pageContext.request.contextPath}/register">Register here</a>. </p>
+		<div class="input">
+			<div class="inputtext">Email: </div>
+			<div class="inputcontent">
+
+				<input type="text" name="email" value="${user.email}" />
+
+			</div>
+		</div>
+
+		<div class="input nobottomborder">
+			<div class="inputtext">Password: </div>
+			<div class="inputcontent">
+
+				<input type="password" name="password" />
+				<br/>
+				<a href="#">Forgot password?</a>
+
+			</div>
+		</div>
+
+		<div class="buttons">
+
+			<input class="orangebutton" type="submit" value="Login" />
+
+			<input class="greybutton" type="submit" value="Cancel" />
+
+		</div>
+
+	</form>
+	<!-- End Login Form -->
 	
-		<p>
-			<!-- Possibly display failure message -->
-			<jsp:scriptlet> String message = (String)request.getAttribute("message");
-				if (message != null)
-					out.println(message);
-			</jsp:scriptlet>
-		</p>  
+	
+	<!-- Possibly display failure message -->
+	<c:if test="${message != null}" >
+ 		<p id="returnMessage"><c:out value="Incorrect email and/or password." /></p>
+	</c:if>
+	
+	<p id="prompt"> Not a member? <a href="${pageContext.request.contextPath}/register">Register here</a>. </p>
+
+	
+	
+	 
+	
+	
+	<jsp:include page="/footer.jsp" />
 		
-	</div>
 
 
 
