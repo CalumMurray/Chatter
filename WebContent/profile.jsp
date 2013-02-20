@@ -26,7 +26,24 @@ $(document).ready(function(){
 </script>
 
 
+<script>
+$(document).ready(function(){
+  	$("p#seeMore").click(function() {
+  		//AJAX GET
+  		$.get("messages?more=true",  
+  	          function(responseText) {  
+  	                $("#result").html(responseText);
+  	                fadeMessagesIn();
+  	           },  
+  	           "json"  
+  	    );  
+	});
+});
 
+function fadeMessagesIn()
+{
+}
+</script>
 
 
 </head>
@@ -52,7 +69,7 @@ $(document).ready(function(){
 			
 			<!-- Account information -->
 			<p> <a href="friends"> Following: ${following} </a> </p>
-			<p> Followers: </p>
+			<p> Followers: ${followers} </p>
 		
 		
 <!-- Create message form direct from profile page -->
@@ -67,7 +84,7 @@ $(document).ready(function(){
 		<div id="messageFeed">
 		
 			<div id="messageTitle">
-				<h2 id="messageTitle">Chat Feed</h2>
+				<h2 id="messageTitle">Chat Feed</h2><hr />
 			</div>
 			
 			<c:if test="${userMessages == null}">
@@ -91,15 +108,17 @@ $(document).ready(function(){
 			</c:forEach>  
 	
 
+			<p id="seeMore"> See More... </p>
+		
 		</div>
 		
 		
-		<jsp:include page="/footer.jsp" />
+		
 		
 		
 	</div>
 
-
+<jsp:include page="/footer.jsp" />
 
 </body>
 

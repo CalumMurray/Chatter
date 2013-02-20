@@ -140,7 +140,7 @@ public class FriendService extends DatabaseConnector
 		PreparedStatement preparedQuery = null;
 		try 
 		{
-			//Prepare Statement - Get all user's friends with a JOIN
+			//Prepare Statement - Get all user's friends with a JOIN ("Following")
 			preparedString = "SELECT users.email, users.firstname, users.lastname " +
 							 "FROM friends " +
 							 "INNER JOIN users " +
@@ -189,4 +189,110 @@ public class FriendService extends DatabaseConnector
 		return friendsList;
 	}
 	
+	public List<User> getAllUsers(String userEmail)
+	{
+		initConnection("jdbc/chatter");
+		
+		List<User> userList = new ArrayList<User>();
+		String preparedString = null;
+		PreparedStatement preparedQuery = null;
+		try 
+		{
+			//Prepare Statement - Get all users except logged-in user
+			preparedString = "SELECT * " +
+							 "FROM users " +
+							 "WHERE email <> ?;";
+			preparedQuery = (PreparedStatement) connection.prepareStatement(preparedString);
+			preparedQuery.setString(1, userEmail);
+
+
+			//TODO: Remove debug
+			System.out.println("Select all user with SQL:  [" + preparedQuery.toString() + "] ");
+			
+			//Execute Statement
+			ResultSet resultSet = preparedQuery.executeQuery();  	
+			
+			while (resultSet.next())
+			{
+				User nextUser = new User();
+				nextUser.setEmail(resultSet.getString("email"));
+				nextUser.setFirstName(resultSet.getString("firstname"));
+				nextUser.setLastName(resultSet.getString("lastname"));
+				
+				userList.add(nextUser);
+			}
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+    	{
+    		try
+    		{
+    			//Finally close stuff to return connection to pool for reuse
+        		preparedQuery.close();
+        		connection.close();
+    		}
+    		catch (SQLException sqle)
+    		{
+    			sqle.printStackTrace();
+    		}
+
+    	}
+		return userList;
+	}
+	
+	
+	public List<User> getFollowers(String userEmail)
+	{
+		initConnection("jdbc/chatter");
+		
+		List<User> followerList = new ArrayList<User>();
+		String preparedString = null;
+		PreparedStatement preparedQuery = null;
+		try 
+		{
+			//Prepare Statement - Get users that are following currently logged-in user ("Followers")
+			preparedString = "SELECT * FROM friends INNER JOIN users ON users.email = friends.email WHERE friend = ?;";
+			preparedQuery = (PreparedStatement) connection.prepareStatement(preparedString);
+			preparedQuery.setString(1, userEmail);
+
+
+			//TODO: Remove debug
+			System.out.println("Select Followers with SQL:  [" + preparedQuery.toString() + "] ");
+			
+			//Execute Statement
+			ResultSet resultSet = preparedQuery.executeQuery();  	
+			
+			while (resultSet.next())
+			{
+				User nextUser = new User();
+				nextUser.setEmail(resultSet.getString("email"));
+				nextUser.setFirstName(resultSet.getString("firstname"));
+				nextUser.setLastName(resultSet.getString("lastname"));
+				
+				followerList.add(nextUser);
+			}
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+    	{
+    		try
+    		{
+    			//Finally close stuff to return connection to pool for reuse
+        		preparedQuery.close();
+        		connection.close();
+    		}
+    		catch (SQLException sqle)
+    		{
+    			sqle.printStackTrace();
+    		}
+
+    	}
+		return followerList;
+	}
 }

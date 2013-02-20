@@ -8,14 +8,14 @@
 <title>Chatter Friends</title>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css" /> <!-- Standard css stylesheet -->
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,400italic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,400italic' rel='stylesheet' type='text/css'> <!-- Web fonts -->
 <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
 
 <script src="../jquery.tooltip.js" type="text/javascript"></script> <!-- Tooltip plugin for JQuery -->
 <script src="../lib/jquery.dimensions.js" type="text/javascript"></script>
 
 <script>
-$('.friendName').tooltip( { 
+$('.userName').tooltip( { 
     track: true, 
     delay: 0, 
     showURL: false, 
@@ -25,6 +25,9 @@ $('.friendName').tooltip( {
 
 </script>
 
+<script>
+
+</script>
 
 </head>
 <body>
@@ -39,17 +42,29 @@ $('.friendName').tooltip( {
 		<!-- Navigation Bar -->
 		<jsp:include page="/nav-bar.jsp" />
 
-		<c:if test="${friends == null}">
-			<c:out value="Make some friends!" />
+		
+		<h1 id="friendsTitle">Friends</h1>
+		
+		<c:if test="${message != null}">
+			<p id="returnMessage"><c:out value="${message }" /></p>
 		</c:if>
-		
-		<h2 id="friendsTitle">Friends</h2>
-		
+	    <hr />
 		<!--  List friends -->
-		<c:forEach items="${friends}" var="friend">  
+		<c:forEach items="${users}" var="user">  
 		    <div class="friendContainer">  
-		    	<div title="${friend.email}" class="friendName">
-		    		<p><c:out  value="${friend.firstName} ${friend.lastName}"/></p>
+		    	<div title="${user.email}" class="userName">
+		    		<p><c:out  value="${user.firstName} ${user.lastName}"/></p>
+		    		<div id="friendOptions">
+			    		<c:choose>
+				    		<c:when test="${user.friend == false}">
+				    			<button class="orangebutton" type="submit" onclick="location.href='${pageContext.request.contextPath}/add/friend/${user.email}'" > Follow </button>
+			    			</c:when>
+			    			<c:otherwise>
+			    				<p id="tick">&#10004;</p>
+			    				<button class="greybutton" type="submit" onclick="location.href='${pageContext.request.contextPath}/delete/friend/${user.email}'" > Stop Following </button>
+			    			</c:otherwise>
+		    			</c:choose>
+	    			</div>
 		    	</div>
 		    	
 		    </div>
@@ -62,7 +77,9 @@ $('.friendName').tooltip( {
 					onkeyup="searchSuggest();" />
 			<div id="searchSuggestion">
 			</div>
-			<input class="orangebutton" type="submit" value="Add" />
+			<div class="buttons">
+				<input class="orangebutton" type="submit" value="Add" />
+			</div>
 		</form>
 
 		<!-- TODO: AJAX Suggest -->
@@ -76,14 +93,15 @@ $('.friendName').tooltip( {
 
 		<!-- Display success message? -->
 		<c:if test="${message != null}">
-			<p> <c:out value="${message}" />
+			<p id="returnMessage"> <c:out value="${message}" />
 		</c:if>
 
-		<!-- Footer -->
-		<jsp:include page="footer.jsp" />
+		
 
 
 	</div>
-
+	
+		<!-- Footer -->
+		<jsp:include page="footer.jsp" />
 </body>
 </html>

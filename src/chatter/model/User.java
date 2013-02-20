@@ -8,7 +8,7 @@ public class User //BEAN
 	private String lastName;
 	private String email;
 	private String password;
-	private String DOB;
+	private boolean friend;	//Is this user a friend of the currently logged-in user?
 	
 	
 	public String getFirstName() {
@@ -35,13 +35,12 @@ public class User //BEAN
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	public String getDOB() {
-		return DOB;
+	public boolean isFriend() {
+		return friend;
 	}
-	public void setDOB(String dOB) {
-		DOB = dOB;
+	public void setFriend(boolean friend) {
+		this.friend = friend;
 	}
-	
+		
 	
 }

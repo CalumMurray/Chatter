@@ -36,8 +36,23 @@ public class FriendsServlet extends HttpServlet
 		}
 		else
 		{	
-			List<User> friends = friendService.getFriends(user.getEmail());
-			request.getSession().setAttribute("friends", friends);
+			List<User> friends = friendService.getFriends(user.getEmail());	//Get friends
+			List<User> allUsers = friendService.getAllUsers(user.getEmail());	//Get all users
+			
+			//Loop through all users adding a flag saying whether they're friends of the currently logged-in user or not.
+			for (User user : allUsers)
+			{
+				String userEmail = user.getEmail();
+				for (User friend : friends)
+				{
+					if (friend.getEmail().equals(userEmail))
+						user.setFriend(true);
+				}
+				
+			}
+			
+
+			request.getSession().setAttribute("users", allUsers);
 			request.getRequestDispatcher("friends.jsp").forward(request, response);
 			return;
 		}

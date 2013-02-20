@@ -47,7 +47,8 @@ public class AddFriendServlet extends HttpServlet
 				System.out.println("RequestURI: " + requestURI);
 				System.out.println("Context path: " + request.getContextPath() + " + /add/friend");
 				//There is not a specific friend to add
-				request.getRequestDispatcher("../addFriend.jsp").forward(request, response);
+				request.setAttribute("message", "No user selected.");
+				request.getRequestDispatcher("../friends.jsp").forward(request, response);
 				return;
 			}
 			else
@@ -58,11 +59,11 @@ public class AddFriendServlet extends HttpServlet
 				//Extract friends email from url
 				int lastSeparator = requestURI.lastIndexOf('/');
 				String friendToAdd = requestURI.substring(lastSeparator + 1);
-				
+				System.out.println("Attempting to add " + friendToAdd);
 				friendService.addFriend(user.getEmail(), friendToAdd);
 				
-				request.setAttribute("message", "Friend " + friendToAdd + " successfully added.");
-				request.getRequestDispatcher("../addFriend.jsp").forward(request, response);
+				request.setAttribute("message", "You are now following " + friendToAdd);
+				request.getRequestDispatcher("../../friends.jsp").forward(request, response);
 				return;
 			}
 		}
@@ -93,7 +94,7 @@ public class AddFriendServlet extends HttpServlet
 		{			
 			//Add single friend
 			friendService.addFriend(user.getEmail(), possibleFriends.get(0).getEmail());
-			request.setAttribute("message", "Friend " + possibleFriends.get(0).getFirstName() + " Added Successfully.");
+			request.setAttribute("message", "You are now following " + possibleFriends.get(0).getFirstName());
 		}
 		
 		request.getRequestDispatcher("../addFriend.jsp").forward(request, response);

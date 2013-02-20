@@ -81,7 +81,7 @@ function validateLogin()
 
 			<input class="orangebutton" type="submit" value="Login" />
 
-			<input class="greybutton" type="submit" value="Cancel" />
+			<input class="greybutton" type="button" value="Cancel" />
 
 		</div>
 

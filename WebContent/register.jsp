@@ -128,7 +128,7 @@ function validateRegister()
 
 			<input class="orangebutton" type="submit" value="Register" />
 
-			<input class="greybutton" type="submit" value="Cancel" />
+			<input class="greybutton" type="button" value="Cancel" />
 
 		</div>
 

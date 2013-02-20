@@ -22,7 +22,7 @@ public class ProfileServlet extends HttpServlet
 {
 	
 	private static final long serialVersionUID = 1L;
-	
+	private FriendService friendService = new FriendService();
 	private MessageService messageService = new MessageService();
 	private	User user;
 	
@@ -47,7 +47,8 @@ public class ProfileServlet extends HttpServlet
 			//TODO: Check null for attributes before fetching them again?
 			
 			
-			request.getSession().setAttribute("following", countFriends());
+			request.getSession().setAttribute("following", countFollowing());
+			request.getSession().setAttribute("followers", countFollowers());
 			request.getSession().setAttribute("userMessages", getMessages(request));
 			request.getRequestDispatcher("profile.jsp").forward(request, response);	//View from corresponding profile.jsp
 			return;
@@ -78,10 +79,18 @@ public class ProfileServlet extends HttpServlet
 
 	}
 	
-	private int countFriends()
+	private int countFollowing()
 	{
-		FriendService friendService = new FriendService();
+		friendService = new FriendService();
 		List<User> friends = (List<User>) friendService.getFriends(user.getEmail());
+		return friends.size();
+		
+	}
+	
+	private int countFollowers()
+	{
+		friendService = new FriendService();
+		List<User> friends = (List<User>) friendService.getFollowers(user.getEmail());
 		return friends.size();
 		
 	}
