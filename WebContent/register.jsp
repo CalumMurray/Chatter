@@ -7,12 +7,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Register</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css" />
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,400italic' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css" /> <!-- Standard CSS Style -->
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,400italic' rel='stylesheet' type='text/css'><!--  Google Web Fonts -->
 <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
 
 
 <script src="http://yui.yahooapis.com/2.7.0/build/yuiloader/yuiloader-min.js"></script>  <!-- Yahoo's YUI CDN -->
+
 <script>   
 var loader = new YAHOO.util.YUILoader({  
     require: ["get","dom","event","animation", "slider"],  
@@ -41,7 +42,7 @@ function validateRegister()
 	var email=document.forms["registerForm"]["email"].value;
 	var pass1=document.forms["registerForm"]["password"].value;
 	var pass2=document.forms["registerForm"]["password2"].value;
-	var filter=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+	var filter=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;	//Email address Regular Expression
 	if (fname == "" || lname == "" || email == "")
 	{
 		alert("Certain fields are missing.");
@@ -136,8 +137,8 @@ function validateRegister()
 	<!-- End Register Form -->
 	
 	<!-- Possibly display failure message -->
-	<c:if test="${message != null}" >
- 		<p id="returnMessage"><c:out value="User with that email already exists." /></p>
+	<c:if test="${failureMessage != null}" >
+ 		<p id="returnMessage"><c:out value="${failureMessage}" /></p>
 	</c:if>
 	
 	<p id="prompt"> Already Registered? <a href="${pageContext.request.contextPath}/login"> Login here. </a></p>

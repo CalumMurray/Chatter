@@ -12,14 +12,10 @@ import chatter.model.User;
 public class LoginService extends DatabaseConnector
 {
 	
-	public LoginService()
-	{
-		
-	}
 
 	public boolean authenticate(String email, String hash)
 	{
-		initConnection("jdbc/chatter");
+		initConnection();
 
 		//Check password matches for given email
 		String preparedString = null;
@@ -73,7 +69,7 @@ public class LoginService extends DatabaseConnector
 		//TODO: Save User bean as field to return?
 		
 		
-		initConnection("jdbc/chatter");
+		initConnection();
 		
 		String preparedString = null;
 		PreparedStatement preparedQuery = null;

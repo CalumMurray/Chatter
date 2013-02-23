@@ -12,29 +12,30 @@ import javax.sql.*;
 @Resource(name="jdbc/chatter", type=javax.sql.DataSource.class)
 public class DatabaseConnector 
 {
+	private static final String DATA_SOURCE_NAME = "jdbc/chatter";
 
 	protected DataSource datasource;
 	protected Connection connection;
 	
 	
-	public void initConnection(String dataSourceName) 
+	public void initConnection() 
 	{
 		//---Get Connection----
 		try
 		{
 			//JNDI Lookups for connection to database through JDBC
 			Context ic = new InitialContext();							
-			datasource = (DataSource) ic.lookup("java:comp/env/" + dataSourceName);
+			datasource = (DataSource) ic.lookup("java:comp/env/" + DATA_SOURCE_NAME);
 			connection = datasource.getConnection();
 		}
 		catch (NamingException ne)
 		{	
-			System.out.println("Naming Exception in Database.java");
+			System.out.println("Naming Exception in DatabaseConnector.java");
 			ne.printStackTrace();
 		} 
 		catch (SQLException e) 
 		{	
-			System.out.println("SQL Exception in Database.java");
+			System.out.println("SQL Exception in DatabaseConnector.java");
 			e.printStackTrace();
 		}
 	}

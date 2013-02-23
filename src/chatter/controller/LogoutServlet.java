@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class LogoutServlet
+/*-----------------------REST Interface-----------------------------
+ * GET /logout - Close session and display logout page (logout.jsp)
  */
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet 
@@ -20,8 +20,7 @@ public class LogoutServlet extends HttpServlet
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		//TODO: Close db connection
-		//TODO:End session
+		//Close session
 		request.getSession().removeAttribute("user");
 		request.getSession().invalidate();
 		//display goodbye page

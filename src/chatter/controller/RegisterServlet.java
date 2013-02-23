@@ -12,8 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import chatter.service.RegisterService;
 import chatter.service.SecurityUtils;
 
-/**
- * Servlet implementation class RegisterServlet
+/*-----------------------REST Interface-----------------------------
+ * GET /register - Displays register page (register.jsp)
+ * POST /register - Attempts to register user with Chatter, by adding to database.  Redirects back if email address already registered.
  */
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet 
@@ -48,7 +49,7 @@ public class RegisterServlet extends HttpServlet
 		if (duplicateExists)
 		{
 			//If email already exists, return to register page with message
-			request.setAttribute("message", "User with that email already registered.");
+			request.setAttribute("failureMessage", "User with that email already registered.");
 			request.getRequestDispatcher("register.jsp").forward(request, response);	
 			return;
 		}

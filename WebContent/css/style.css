@@ -69,10 +69,18 @@ p#returnMessage {
 	font-weight: bold;
 }
 
-p#tick {
-	
-	float: right;
-	font-size: 20px;
+
+/*Text for dialog shouldn't be shown on page.*/
+#dialog {
+	display: none;
+}
+
+p#delete {
+	cursor: pointer;
+}
+
+img#deleteImage{
+	padding: 5px;
 }
 
 /* ------FORM------ */
@@ -221,7 +229,7 @@ p#tick {
 	border-radius: 20px; 
 	line-height: 20px;
 	font-size: 16px;
-	padding: 6px 12px;
+	padding: 5px 10px;
 	color: #fff;
 	text-shadow: -1px -1px #ff9b19;
 	float: right;
@@ -346,8 +354,8 @@ p#tick {
 
 /*------Friends--------*/
 .friendContainer {
-	margin: 10px;
-	padding: 10px;
+	margin: 15px;
+	padding: 20px;
 	-webkit-box-shadow: 0px 0px 8px 2px #d1d1d1;
 	-moz-box-shadow: 0px 0px 8px 2px #d1d1d1;
 	box-shadow: 0px 0px 8px 2px #d1d1d1; 
@@ -358,6 +366,94 @@ p#tick {
 
 .userName p {
 	font-size: 22px;
+}
+
+a#friendDetails {
+	font-size: 22px;
+}
+img#friendProfilePicture {
+	position: relative;
+	top: -20px;
+	width: 5%;
+	height:5%;
+	float: left;
+	padding: 10px;
+	
+	
+}
+
+p#tick {
+	
+	float: left;
+	font-size: 20px;
+}
+
+.greybutton#friendButton {
+	background: #e1e1e1; /* Old browsers */
+	background: -moz-linear-gradient(top, #e1e1e1 0%, #bababa 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e1e1e1), color-stop(100%,#bababa)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #e1e1e1 0%,#bababa 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #e1e1e1 0%,#bababa 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #e1e1e1 0%,#bababa 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e1e1e1', endColorstr='#bababa',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #e1e1e1 0%,#bababa 100%); /* W3C */ 
+	border: 1px solid #bababa;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px; 
+	line-height: 20px;
+	font-size: 16px;
+	padding: 6px 12px;
+	color: #fff;
+	text-shadow: -1px -1px #bababa;
+	cursor: pointer;
+	position: relative;
+	top: -30px;
+}
+
+.greybutton#friendButton:hover {
+	background: #bababa; /* Old browsers */
+	background: -moz-linear-gradient(top, #bababa 0%, #e1e1e1 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bababa), color-stop(100%,#e1e1e1)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #bababa 0%,#e1e1e1 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #bababa 0%,#e1e1e1 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #bababa 0%,#e1e1e1 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bababa', endColorstr='#e1e1e1',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #bababa 0%,#e1e1e1 100%); /* W3C */ 
+}
+
+.orangebutton#friendButton {
+	background: #ffc339; /* Old browsers */
+	background: -moz-linear-gradient(top, #ffc339 0%, #ff9b19 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffc339), color-stop(100%,#ff9b19)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ffc339 0%,#ff9b19 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ffc339 0%,#ff9b19 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #ffc339 0%,#ff9b19 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffc339', endColorstr='#ff9b19',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #ffc339 0%,#ff9b19 100%); /* W3C */
+	border: 1px solid #ff9b19;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px; 
+	line-height: 20px;
+	font-size: 16px;
+	padding: 5px 10px;
+	color: #fff;
+	text-shadow: -1px -1px #ff9b19;
+	cursor: pointer;
+		position: relative;
+	top: -30px;
+}
+
+.orangebutton#friendButton:hover{
+	background: #ff9b19; /* Old browsers */
+	background: -moz-linear-gradient(top, #ff9b19 0%, #ffc339 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff9b19), color-stop(100%,#ffc339)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ff9b19 0%,#ffc339 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ff9b19 0%,#ffc339 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #ff9b19 0%,#ffc339 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9b19', endColorstr='#ffc339',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #ff9b19 0%,#ffc339 100%); /* W3C */
 }
 
 /* ------Messages------ */
@@ -389,6 +485,22 @@ p#tick {
 	cursor: pointer;
 }
 
+.highlightedMessage {
+	margin: 10px;
+	-webkit-box-shadow: 0px 0px 8px 2px #d1d1d1;
+	-moz-box-shadow: 0px 0px 8px 2px #d1d1d1;
+	box-shadow: 0px 0px 8px 2px #d1d1d1; 
+	border: 1px dotted #a1a1a1;
+	padding: 10px ; 
+	border-radius: 10px;
+	-moz-border-radius: 10px; /* Old Firefox */
+	width: 500px;
+	float: right;
+	background: #ffcc99;
+	cursor: pointer;
+}
+
+
 .messageContainer:hover {
 	border-style:solid;
 	border-width:5px;
@@ -405,6 +517,12 @@ p#tick {
 	float: right;
 	font-size: 8px;
 	color: #eeeeee;
+}
+
+button#messageButton {
+	display: block;
+    margin: 0 auto;
+    text-align: center;
 }
 
 /*------- Footer ---------*/

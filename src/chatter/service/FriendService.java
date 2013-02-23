@@ -26,7 +26,7 @@ public class FriendService extends DatabaseConnector
 		}
 		
 		
-		initConnection("jdbc/chatter");
+		initConnection();
 		
 		List<User> userList = new ArrayList<User>();
 		String preparedString = null;
@@ -47,8 +47,8 @@ public class FriendService extends DatabaseConnector
 			preparedQuery.setString(4, firstName);
 			preparedQuery.setString(5, lastName);
 			
-			//TODO: Remove debug
-			System.out.println("Get user with SQL:  [" + preparedQuery.toString() + "] ");
+				//TODO: Remove debug
+				System.out.println("Find user with SQL:  [" + preparedQuery.toString() + "] ");
 			
 			//Execute Statement
 			ResultSet resultSet = preparedQuery.executeQuery();  	
@@ -89,9 +89,9 @@ public class FriendService extends DatabaseConnector
 		return userList;		
 	}
 
-	public void addFriend(String email, String friendEmail)
+	public void addFollowing(String email, String friendEmail)
 	{
-		initConnection("jdbc/chatter");
+		initConnection();
 		
 		String preparedString = null;
 		PreparedStatement preparedQuery = null;
@@ -103,8 +103,8 @@ public class FriendService extends DatabaseConnector
 			preparedQuery.setString(1, email);
 			preparedQuery.setString(2, friendEmail);
 
-			//TODO: Remove debug
-			System.out.println("Add user with SQL:  [" + preparedQuery.toString() + "] ");
+				//TODO: Remove debug
+				System.out.println("Add following with SQL:  [" + preparedQuery.toString() + "] ");
 			
 			//Execute Statement
 			preparedQuery.executeUpdate();  	
@@ -131,9 +131,9 @@ public class FriendService extends DatabaseConnector
     	}
 	}
 	
-	public List<User> getFriends(String userEmail)
+	public List<User> getFollowing(String userEmail)
 	{
-		initConnection("jdbc/chatter");
+		initConnection();
 		
 		List<User> friendsList = new ArrayList<User>();
 		String preparedString = null;
@@ -191,7 +191,7 @@ public class FriendService extends DatabaseConnector
 	
 	public List<User> getAllUsers(String userEmail)
 	{
-		initConnection("jdbc/chatter");
+		initConnection();
 		
 		List<User> userList = new ArrayList<User>();
 		String preparedString = null;
@@ -207,7 +207,7 @@ public class FriendService extends DatabaseConnector
 
 
 			//TODO: Remove debug
-			System.out.println("Select all user with SQL:  [" + preparedQuery.toString() + "] ");
+			System.out.println("Select all users with SQL:  [" + preparedQuery.toString() + "] ");
 			
 			//Execute Statement
 			ResultSet resultSet = preparedQuery.executeQuery();  	
@@ -246,7 +246,7 @@ public class FriendService extends DatabaseConnector
 	
 	public List<User> getFollowers(String userEmail)
 	{
-		initConnection("jdbc/chatter");
+		initConnection();
 		
 		List<User> followerList = new ArrayList<User>();
 		String preparedString = null;
@@ -254,7 +254,9 @@ public class FriendService extends DatabaseConnector
 		try 
 		{
 			//Prepare Statement - Get users that are following currently logged-in user ("Followers")
-			preparedString = "SELECT * FROM friends INNER JOIN users ON users.email = friends.email WHERE friend = ?;";
+			preparedString = "SELECT * FROM friends " +
+							 "INNER JOIN users ON users.email = friends.email " +
+							 "WHERE friend = ?;";
 			preparedQuery = (PreparedStatement) connection.prepareStatement(preparedString);
 			preparedQuery.setString(1, userEmail);
 
@@ -294,5 +296,48 @@ public class FriendService extends DatabaseConnector
 
     	}
 		return followerList;
+	}
+
+	public void deleteFollowing(String userEmail, String friendEmail) 
+	{
+		initConnection();
+		
+		String preparedString = null;
+		PreparedStatement preparedQuery = null;
+		try 
+		{
+			//Prepare Statement
+			preparedString = "DELETE FROM friends WHERE email = ? AND friend = ?;";
+			preparedQuery = (PreparedStatement) connection.prepareStatement(preparedString);
+			preparedQuery.setString(1, userEmail);
+			preparedQuery.setString(2, friendEmail);
+
+				//TODO: Remove debug
+				System.out.println("Delete following with SQL:  [" + preparedQuery.toString() + "] ");
+			
+			//Execute Statement
+			preparedQuery.executeUpdate();  	
+			
+
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+    	{
+    		try
+    		{
+    			//Finally close stuff to return connection to pool for reuse
+        		preparedQuery.close();
+        		connection.close();
+    		}
+    		catch (SQLException sqle)
+    		{
+    			sqle.printStackTrace();
+    		}
+
+    	}
+		
 	}
 }

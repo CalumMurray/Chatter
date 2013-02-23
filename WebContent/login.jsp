@@ -8,8 +8,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Login</title>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css" />
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,400italic' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css" /><!-- Standard css style -->
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,400italic' rel='stylesheet' type='text/css'>	<!-- Google Web Fonts -->
 <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script><!-- JQuery CDN -->
@@ -24,7 +24,7 @@ function validateLogin()
 {
 	//TODO: Move to external reusable .js script file	
 	var email=document.forms["loginForm"]["email"].value;
-	var filter=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+	var filter=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;	//Email address Regular Expression
 	if ( email == "")
 	{
 		alert("Certain fields are missing.");
@@ -50,8 +50,9 @@ function validateLogin()
 	<div id="bannerText">
 		<h1>Chatter</h1>
 	</div>
+	
+	
 <!--  Login form -->
-
 
 	<form class="myForm" action="${pageContext.request.contextPath}/login" method="post" onsubmit="return validateLogin()" name="loginForm">
 
@@ -90,16 +91,13 @@ function validateLogin()
 	
 	
 	<!-- Possibly display failure message -->
-	<c:if test="${message != null}" >
- 		<p id="returnMessage"><c:out value="Incorrect email and/or password." /></p>
+	<c:if test="${failureMessage != null}" >
+ 		<p id="returnMessage"><c:out value="${failureMessage}" /></p>
 	</c:if>
 	
 	<p id="prompt"> Not a member? <a href="${pageContext.request.contextPath}/register">Register here</a>. </p>
 
-	
-	
-	 
-	
+
 	
 	<jsp:include page="/footer.jsp" />
 		

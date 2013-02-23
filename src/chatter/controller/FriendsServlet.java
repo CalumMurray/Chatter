@@ -36,7 +36,7 @@ public class FriendsServlet extends HttpServlet
 		}
 		else
 		{	
-			List<User> friends = friendService.getFriends(user.getEmail());	//Get friends
+			List<User> friends = friendService.getFollowing(user.getEmail());	//Get friends
 			List<User> allUsers = friendService.getAllUsers(user.getEmail());	//Get all users
 			
 			//Loop through all users adding a flag saying whether they're friends of the currently logged-in user or not.

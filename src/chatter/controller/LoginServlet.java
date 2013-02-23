@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +15,11 @@ import chatter.service.LoginService;
 import chatter.service.SecurityUtils;
 
 
-/**
- * Servlet implementation class LoginServlet
+/*-----------------------REST Interface-----------------------------
+ * GET /login - Displays login page (login.jsp)
+ * POST /login - Authenticates user and logs them in to their profile (otherwise redirects back to login)
  */
-@WebServlet(urlPatterns = { "/login"}, initParams = {@WebInitParam(name = "data-source", value = "jdbc/chatter", description = "Jdbc link to chatter.db")})
+@WebServlet(urlPatterns = { "/login"})
 public class LoginServlet extends HttpServlet 
 {
 	private static final long serialVersionUID = 1L;
@@ -59,15 +59,14 @@ public class LoginServlet extends HttpServlet
 		
 		//Authenticate login
 		boolean authenticated = loginService.authenticate(email, hashedPass);
-		System.out.println("Authenticated:  " + (authenticated ? "true" : "false"));
+		
+			//TODO: Remove debug
+			System.out.println("Authenticated:  " + (authenticated ? "true" : "false"));
 		
 		//If logged in correctly
 		if (authenticated)
 		{
 			User user = loginService.getUser(email);
-			System.out.println("----USER----:\n" + user.getEmail());
-			System.out.println(user.getFirstName());
-			System.out.println(user.getLastName());
 			
 			//Set a session User object - Remember user as LOGGED IN
 			request.getSession().setAttribute("user", user);
@@ -79,8 +78,8 @@ public class LoginServlet extends HttpServlet
 		else
 		{
 			//if incorrect login, return to login page with message
-			request.setAttribute("message", "Invalid Username or Password.");
-			request.getRequestDispatcher("login.jsp?credentials=bad").forward(request, response);
+			request.setAttribute("failureMessage", "Invalid Username or Password.");
+			request.getRequestDispatcher("login.jsp").forward(request, response);
 			return;
 		}
 		

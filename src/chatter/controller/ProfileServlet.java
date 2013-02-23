@@ -13,18 +13,26 @@ import chatter.model.Message;
 import chatter.model.User;
 import chatter.service.FriendService;
 import chatter.service.MessageService;
+import chatter.service.RegisterService;
+import chatter.service.UserService;
 
-/**
- * Servlet implementation class ProfileServlet
+/*-----------------------REST Interface-----------------------------
+ * GET /profile - Shows user's profile, including all your's and following's messages in a feed.  Allows to post message also. Displays as profile.jsp
+ * GET /profile/<userEmail> - Show specific user's profile (or 404) 
+ * DELETE /profile - Delete account.
  */
 @WebServlet({ "/profile", "/profile/*" })
 public class ProfileServlet extends HttpServlet 
 {
-	
 	private static final long serialVersionUID = 1L;
+	
 	private FriendService friendService = new FriendService();
+	private UserService userService = new UserService();
 	private MessageService messageService = new MessageService();
-	private	User user;
+	private RegisterService registerService = new RegisterService();
+	
+	private	User loggedInUser;
+	private	User profileUser;
 	
 	
 	/**
@@ -32,26 +40,40 @@ public class ProfileServlet extends HttpServlet
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		user = (User) request.getSession().getAttribute("user");
-		System.out.println("User: " + user);
+		loggedInUser = (User) request.getSession().getAttribute("user");
 		//Check is user is logged in for session
-		if (user == null)
+		if (loggedInUser == null)
 		{
 			response.sendRedirect("login");	//Not logged in yet - redirect to login page
 			return;
 		}
 		else
 		{
-			//Otherwise show this page
+			if (request.getRequestURI().equals(request.getContextPath() + "/profile"))
+			{
+				//Show logged in user's profile
 			
-			//TODO: Check null for attributes before fetching them again?
-			
-			
-			request.getSession().setAttribute("following", countFollowing());
-			request.getSession().setAttribute("followers", countFollowers());
-			request.getSession().setAttribute("userMessages", getMessages(request));
-			request.getRequestDispatcher("profile.jsp").forward(request, response);	//View from corresponding profile.jsp
-			return;
+				request.getSession().setAttribute("following", countFollowing(loggedInUser));
+				request.getSession().setAttribute("followers", countFollowers(loggedInUser));
+				request.getSession().setAttribute("userMessages", getAllMessages(loggedInUser));
+				request.getRequestDispatcher("profile.jsp").forward(request, response);	//View from corresponding profile.jsp
+				return;
+			}
+			else
+			{
+				//Show specific user's profile specified in URI - /profile/<userEmail>
+				//TODO: Check to display 404
+				int lastSeparator = request.getRequestURI().lastIndexOf('/');
+				String uriString = request.getRequestURI().substring(lastSeparator + 1);
+				
+				profileUser = userService.getProfileUser(uriString);
+				request.setAttribute("following", countFollowing(profileUser));
+				request.setAttribute("followers", countFollowers(profileUser));
+				request.setAttribute("userMessages", getUserMessages(profileUser));
+				request.getRequestDispatcher("profile.jsp").forward(request, response);	//View from corresponding profile.jsp
+				return;
+
+			}
 		}
 	}
 
@@ -60,34 +82,46 @@ public class ProfileServlet extends HttpServlet
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		String messageContent = request.getParameter("message");
-		String posterEmail = (String)((User) request.getSession().getAttribute("user")).getEmail();
 		
-		messageService.postMessage(posterEmail, messageContent);
-		
-		//Return to createMessage.jsp with success message
-		request.setAttribute("successMessage", "Chat posted Successfully!");
-		request.getRequestDispatcher("profile.jsp").forward(request, response);
 	}
 
-	
-	private List<Message> getMessages(HttpServletRequest request)
+	/**
+	 * @see HttpServlet#doPDelete(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		MessageService messageService = new MessageService();
+		//Delete Account
+		registerService.deleteUser(loggedInUser.getEmail());
+		request.getRequestDispatcher("deleted.jsp").forward(request, response);	//TODO return something else 'cause this is from ajax.
+	}
+	
+	
+	private List<Message> getAllMessages(User user)
+	{
+		messageService = new MessageService();
 		return (List<Message>) messageService.fetchUserFriendMessages(user);
 		
 
 	}
 	
-	private int countFollowing()
+	private List<Message> getUserMessages(User user)
+	{
+		messageService = new MessageService();
+		return (List<Message>) messageService.getUserMessages(user.getEmail());
+		
+
+	}
+
+	
+	private int countFollowing(User user)
 	{
 		friendService = new FriendService();
-		List<User> friends = (List<User>) friendService.getFriends(user.getEmail());
+		List<User> friends = (List<User>) friendService.getFollowing(user.getEmail());
 		return friends.size();
 		
 	}
 	
-	private int countFollowers()
+	private int countFollowers(User user)
 	{
 		friendService = new FriendService();
 		List<User> friends = (List<User>) friendService.getFollowers(user.getEmail());
