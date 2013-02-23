@@ -32,7 +32,7 @@ public class ProfileServlet extends HttpServlet
 	private RegisterService registerService = new RegisterService();
 	
 	private	User loggedInUser;
-	private	User profileUser;
+	private	User otherUser;
 	
 	
 	/**
@@ -41,16 +41,18 @@ public class ProfileServlet extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		loggedInUser = (User) request.getSession().getAttribute("user");
+		
 		//Check is user is logged in for session
 		if (loggedInUser == null)
 		{
-			response.sendRedirect("login");	//Not logged in yet - redirect to login page
+			response.sendRedirect(request.getContextPath() + "/login");	//Not logged in yet - redirect to login page
 			return;
 		}
 		else
 		{
 			if (request.getRequestURI().equals(request.getContextPath() + "/profile"))
 			{
+				
 				//Show logged in user's profile
 			
 				request.getSession().setAttribute("following", countFollowing(loggedInUser));
@@ -62,15 +64,25 @@ public class ProfileServlet extends HttpServlet
 			else
 			{
 				//Show specific user's profile specified in URI - /profile/<userEmail>
-				//TODO: Check to display 404
+				
 				int lastSeparator = request.getRequestURI().lastIndexOf('/');
 				String uriString = request.getRequestURI().substring(lastSeparator + 1);
 				
-				profileUser = userService.getProfileUser(uriString);
-				request.setAttribute("following", countFollowing(profileUser));
-				request.setAttribute("followers", countFollowers(profileUser));
-				request.setAttribute("userMessages", getUserMessages(profileUser));
-				request.getRequestDispatcher("profile.jsp").forward(request, response);	//View from corresponding profile.jsp
+				
+				otherUser = userService.getProfileUser(uriString);
+				//Check to display 404
+				if (otherUser == null)
+				{
+					request.getRequestDispatcher("../404.jsp").forward(request, response);
+					return;
+				}
+				
+				request.setAttribute("user", otherUser);
+				request.setAttribute("otherUser", true);	//To differentiate between logged-in (Session) user and one we're viewing (Page)
+				request.setAttribute("following", countFollowing(otherUser));
+				request.setAttribute("followers", countFollowers(otherUser));
+				request.setAttribute("userMessages", getUserMessages(otherUser));//Only view the user's messages, not their friends' etc.
+				request.getRequestDispatcher("../profile.jsp").forward(request, response);	//View from corresponding profile.jsp
 				return;
 
 			}
@@ -92,7 +104,7 @@ public class ProfileServlet extends HttpServlet
 	{
 		//Delete Account
 		registerService.deleteUser(loggedInUser.getEmail());
-		request.getRequestDispatcher("deleted.jsp").forward(request, response);	//TODO return something else 'cause this is from ajax.
+		//request.getRequestDispatcher("deleted.jsp").forward(request, response);	//TODO return something else 'cause this is from ajax.
 	}
 	
 	

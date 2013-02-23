@@ -29,13 +29,16 @@ public class UserService extends DatabaseConnector
     		
 	    		//TODO: Remove debug
 				System.out.println("Get profile user with  [" + preparedQuery.toString() + "] ");
-    		
-    		//Package into User bean
-			User profileUser = new User();
-			profileUser.setEmail(email);
-			profileUser.setFirstName(resultSet.getString("firstname"));
-			profileUser.setLastName(resultSet.getString("firstname"));
-			
+			User profileUser = null;
+    		while (resultSet.next())
+    		{
+	    		//Package into User bean
+				profileUser = new User();
+				profileUser.setEmail(email);
+				profileUser.setFirstName(resultSet.getString("firstname"));
+				profileUser.setLastName(resultSet.getString("lastname"));
+    		}
+			return profileUser;
 		
     	}
     	catch(Exception ex)

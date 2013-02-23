@@ -16,7 +16,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/javascript/relativeTime.js" > </script>	<!-- Custom javascript to turn timestamps into e.g. "x seconds ago" etc.  -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script><!-- JQuery CDN -->
 
-
+<!-- View a message on it's own with the possibility of deleting it -->
 <script>
 function viewIndividualMessage(messageID)
 {
@@ -24,9 +24,12 @@ function viewIndividualMessage(messageID)
 }
 </script>
 
-
-
+<!-- Use JQuery AJAX to HTTP DELETE to /profile in order to delete your profile -->
 <script>
+
+</script>
+
+<!-- <script>
 $(document).ready(function(){
   	$("p#seeMore").click(function() {
   		//AJAX GET
@@ -44,7 +47,7 @@ function fadeMessagesIn()
 {
 }
 </script>
-
+ -->
 
 </head>
 
@@ -62,15 +65,25 @@ function fadeMessagesIn()
 			<div class="profileContainer">
 	
 				<!--  content -->
-				<h1> ${user.firstName} </h1>
+				<h1> ${user.firstName} </h1> <p><a href=""(Delete?)</p>
 				
 				<div id="profilePicture">
 					<img src="images/blank_profile.png" alt="Blank Profile Picture"/>
 				</div>
 				
-				<!-- Account information -->
-				<p> <a href="following"> Following: ${following} </a> </p>
-				<p> <a href="followers"> Followers: ${followers} </a> </p>
+				<!-- Only allow link when it's the logged-in Session user -->
+				<c:choose>
+					 <c:when test="${otherUser != true}">
+						<!-- Account information -->
+						<p><a href="following"> Following: ${following} </a> </p>
+						<p> <a href="followers"> Followers: ${followers} </a> </p>
+					</c:when>
+					<c:otherwise>
+						<!-- Account information -->
+						<p>Following: ${following} </p>
+						<p> Followers: ${followers} </p>
+					</c:otherwise>
+				</c:choose>
 			
 			
 	<!-- Create message form direct from profile page -->

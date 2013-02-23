@@ -46,11 +46,7 @@ public class FollowingServlet extends HttpServlet
 			{
 				//Return with a message if you aren't following anybody
 				request.setAttribute("failureMessage", "You are currently not following anybody");
-				request.getRequestDispatcher("following.jsp").forward(request, response);
-				return;
 			}
-			else
-			{
 				//Loop through all users adding a flag saying whether they're friends of the currently logged-in user or not.
 				for (User user : allUsers)
 				{
@@ -66,7 +62,6 @@ public class FollowingServlet extends HttpServlet
 				request.setAttribute("users", allUsers);
 				request.getRequestDispatcher("following.jsp").forward(request, response);
 				return;
-			}
 			
 
 		}
@@ -114,8 +109,8 @@ public class FollowingServlet extends HttpServlet
 		
 		friendService.deleteFollowing(user.getEmail(), followingToDelete);
 		
-		request.setAttribute("returnMessage", "You've stopped following " + followingToDelete);
-		request.getRequestDispatcher(request.getRequestURI()).forward(request, response);			//Return to requesting page
+		request.setAttribute("deleteMessage", "You've stopped following " + followingToDelete);
+		response.sendRedirect(request.getContextPath() + "/following");
 
 	}
 

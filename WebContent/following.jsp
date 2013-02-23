@@ -37,7 +37,7 @@ $(document).ready(function(){
 	$("button[name='delete']").click(function() {
 		alert("in JQuery's click for delete ajax");
 		var buttonText = $(this).text();
-		var email = buttonText.substring(buttonText.lastIndexOf(' '), buttonText.length);
+		var email = buttonText.substring(buttonText.lastIndexOf(' ') + 1, buttonText.length);
 		$.ajax({
 		  url: "${pageContext.request.contextPath}/following/" + email,
 		  type: "DELETE",
@@ -92,13 +92,13 @@ function addFollowing(userToFollow) {
 			<c:if test="${failureMessage != null}">
 				<p id="returnMessage"><c:out value="${failureMessage}" /></p>
 			</c:if>
+			
+			<c:if test="${deleteMessage != null}">
+				<p id="returnMessage"><c:out value="${deleteMessage}" /></p>
+			</c:if>
 					    
 			<!--  List friends -->
 			<c:forEach items="${users}" var="currentUser">  
-			
-						<div id="dialog">
-						<p> You've stopped following ${currentUser.email}</p>
-						</div>
 			
 			    <div class="friendContainer">  
 			    	<div title="${currentUser.email}" class="friendEmail">
