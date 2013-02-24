@@ -76,7 +76,7 @@ public class ProfileServlet extends HttpServlet
 					request.getRequestDispatcher("../404.jsp").forward(request, response);
 					return;
 				}
-				
+
 				request.setAttribute("user", otherUser);
 				request.setAttribute("otherUser", true);	//To differentiate between logged-in (Session) user and one we're viewing (Page)
 				request.setAttribute("following", countFollowing(otherUser));
@@ -104,7 +104,9 @@ public class ProfileServlet extends HttpServlet
 	{
 		//Delete Account
 		registerService.deleteUser(loggedInUser.getEmail());
-		//request.getRequestDispatcher("deleted.jsp").forward(request, response);	//TODO return something else 'cause this is from ajax.
+		request.getSession().removeAttribute("user");
+		request.getSession().invalidate();
+		response.sendRedirect(request.getContextPath() + "/login");
 	}
 	
 	

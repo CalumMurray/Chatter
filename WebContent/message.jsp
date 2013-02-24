@@ -15,6 +15,8 @@
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/javascript/relativeTime.js" > </script>	<!-- Custom javascript to turn timestamps into e.g. "x seconds ago" etc.  -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script><!-- JQuery CDN -->
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" /><!-- JQuery UI CSS -->
+  <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script><!-- JQuery UI CDN -->
 
 
 <!-- JQuery AJAX to send HTTP DELETE method to /messages/<id> to delete the message from db -->
@@ -24,8 +26,16 @@ $(document).ready(function(){
 		$.ajax({
 		  url: "${pageContext.request.contextPath}/messages/${message.id}",
 		  type: "DELETE",
-		}).done(function() {
-			$("#dialog").dialog();
+		}).done(function(data) {
+			$( "#dialog" ).dialog({
+		        modal: true,
+		        buttons: {
+			        Ok: function() {
+			          $( this ).dialog( "close" );
+			        }
+		        }
+			});
+			location.href = "${pageContext.request.contextPath}/profile";
 		});
 	});
 });
@@ -66,7 +76,7 @@ $(document).ready(function(){
 		
 		
 		
-		<div id="dialog">
+		<div id="dialog" title="Deleted">
 			<p> Message deleted! </p>
 		</div>
 

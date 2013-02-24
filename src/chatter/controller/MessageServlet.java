@@ -81,7 +81,6 @@ public class MessageServlet extends HttpServlet
 					userMessages = messageService.getUserMessages(uriString);
 					request.setAttribute("userMessages", userMessages);	
 					request.getRequestDispatcher("profile.jsp").forward(request, response);	//TODO: Correct forward jsp page?
-
 				}
 
 				return;
@@ -112,7 +111,8 @@ public class MessageServlet extends HttpServlet
 		
 		//Return to profile.jsp with success message
 		request.setAttribute("successMessage", "Chat posted Successfully!");
-		request.getRequestDispatcher(request.getRequestURI()).forward(request, response);	//Go back to posting page
+		//request.getRequestDispatcher("profile").forward(request, response);	//Go back to posting page
+		response.sendRedirect("profile");
 	}
 
 	/**

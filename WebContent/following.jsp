@@ -35,14 +35,12 @@ $('.friendEmail').tooltip( {
 <script>
 $(document).ready(function(){
 	$("button[name='delete']").click(function() {
-		alert("in JQuery's click for delete ajax");
 		var buttonText = $(this).text();
 		var email = buttonText.substring(buttonText.lastIndexOf(' ') + 1, buttonText.length);
 		$.ajax({
-		  url: "${pageContext.request.contextPath}/following/" + email,
+		  url: "${pageContext.request.contextPath}/following" + email,
 		  type: "DELETE",
 		}).done(function() {
-			$("body").append("<p id='returnMessage'>You've stopped following email</p>");
 			$("#dialog").dialog();
 		});
 	});

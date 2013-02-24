@@ -102,8 +102,8 @@ public class FollowingServlet extends HttpServlet
 	{
 		String uri = request.getRequestURI();
 		//Stop following user - Delete row in friends table
-		int lastSeparator = request.getRequestURI().lastIndexOf('/');
-		String followingToDelete = request.getRequestURI().substring(lastSeparator + 1);
+		int lastSeparator = uri.lastIndexOf('/');
+		String followingToDelete = uri.substring(lastSeparator + 1);
 			//TODO: Remove debug
 			System.out.println("Attempting to delete " + followingToDelete);
 		
@@ -111,6 +111,7 @@ public class FollowingServlet extends HttpServlet
 		
 		request.setAttribute("deleteMessage", "You've stopped following " + followingToDelete);
 		response.sendRedirect(request.getContextPath() + "/following");
+
 
 	}
 
