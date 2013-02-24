@@ -14,7 +14,6 @@ import chatter.service.FriendService;
 
 /*-----------------------REST Interface-----------------------------
  * GET /follower - Returns list (UserList?) of all users following the currently logged in user
- * GET /follower/<userEmail> - Returns specific details (Profile?) of a user that's following you (or 404)
  */
 @WebServlet({ "/followers", "/followers/*" })
 public class FollowerServlet extends HttpServlet 

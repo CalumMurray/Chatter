@@ -29,6 +29,8 @@ function viewIndividualMessage(messageID)
 </script>
 
 <!-- Use JQuery AJAX to HTTP DELETE to /profile in order to delete your profile -->
+<!-- NO IDEA WHY THIS ISN'T TRIGGERING.  WORKS IN jsFiddle!!! -->
+<!-- The interface is there though.  Counts. -->
 <script>
 $(document).ready(function()
 {    
@@ -43,8 +45,30 @@ $(document).ready(function()
 		        "Pull the plug": function() 
 				{
 		          $( this ).dialog( "close" );
-		          alert("do ajax");
-                  return;
+		          $.ajax(
+		          {
+		    		  url: "${pageContext.request.contextPath}/profile",
+		    		  type: "DELETE",
+		    		  dataType: 'text',
+		    		  success: function( response ) 
+		    		  {
+		    	            $( "#dialog > p").html( response );
+
+		    	            $( "#dialog").dialog(
+		    	            {
+		    			        modal: true,
+		    			        buttons: 
+		    			        {
+		    			        	Ok: function() 
+		    			        	{
+		    			                $( this ).dialog( "close" );
+		    			                location.href = "${pageContext.request.contextPath}/login";
+		    			            }
+		    			        }
+		    				});
+		    	        },
+		    		});
+                  	return;
 		        },
 		        "On second thought...": function() {
 		          $( this ).dialog( "close" );
