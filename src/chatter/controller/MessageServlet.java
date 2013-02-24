@@ -1,6 +1,7 @@
 package chatter.controller;
 
 import java.io.IOException;
+
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import chatter.model.*;
 import chatter.service.*;
+import com.google.gson.Gson;
 
 /*-----------------------REST Interface-----------------------------
  * GET /messages - Returns list (MessageList?) of all users and following's messages.
@@ -129,24 +131,24 @@ public class MessageServlet extends HttpServlet
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		//Delete specific message (IDed by "/<id>" and ONLY if it was posted by the logged-in user)
-		//Show 404 if message doesn't exist 
-		
+
+		response.setContentType("text/plain");
 		int lastSeparator = request.getRequestURI().lastIndexOf('/');
 		String messageToDelete = request.getRequestURI().substring(lastSeparator + 1);
-			//TODO: Remove debug
-			System.out.println("Attempting to delete " + messageToDelete);
+
 			
 		try 
 		{																
 			int messageId= Integer.valueOf(messageToDelete);
 			messageService.deleteMessage(messageId);
-			request.setAttribute("message", "Message deleted");
-			request.getRequestDispatcher("/message.jsp");								//TODO: Correct forward jsp page?
+			//request.setAttribute("message", "Message deleted");
+			//request.getRequestDispatcher("/message.jsp");		
+            response.getWriter().println("Message deleted");
 		}
 		catch (NumberFormatException nfe)
 		{
-			request.setAttribute("failureMessage", "No such message " + messageToDelete);
-			request.getRequestDispatcher("404.jsp").forward(request, response);
+			//request.setAttribute("failureMessage", "No such message " + messageToDelete);
+			response.getWriter().println("No such message " + messageToDelete);
 			return;
 		}
 		

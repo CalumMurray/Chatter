@@ -102,11 +102,18 @@ public class ProfileServlet extends HttpServlet
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		response.setContentType("text/plain");
 		//Delete Account
 		registerService.deleteUser(loggedInUser.getEmail());
+		
+		
+		
+		
+		response.getWriter().println("User: " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName() + " Deleted");
+		
 		request.getSession().removeAttribute("user");
 		request.getSession().invalidate();
-		response.sendRedirect(request.getContextPath() + "/login");
+		loggedInUser = null;
 	}
 	
 	

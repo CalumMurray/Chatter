@@ -22,9 +22,9 @@
         minEvictableIdleTimeMillis="30000" 
         jmxEnabled="true"
         jdbcInterceptors="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer"
-        username="root" 
-        password="password"
+        username="CalumMurray" 
+        password="ac31004"
         driverClassName="com.mysql.jdbc.Driver"
-        url="jdbc:mysql://localhost:3306/chatter"/>
+        url="jdbc:mysql://arlia.computing.dundee.ac.uk:3306/calummurray"/>
 
 </context>

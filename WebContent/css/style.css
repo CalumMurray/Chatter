@@ -391,6 +391,11 @@ p#tick {
 	font-size: 20px;
 }
 
+#deleteButton {
+	float:left;
+	padding: 5px;
+}
+
 .greybutton#friendButton {
 	background: #e1e1e1; /* Old browsers */
 	background: -moz-linear-gradient(top, #e1e1e1 0%, #bababa 100%); /* FF3.6+ */

@@ -14,46 +14,46 @@
 <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/javascript/relativeTime.js" > </script>	<!-- Custom javascript to turn timestamps into e.g. "x seconds ago" etc.  -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script><!-- JQuery CDN -->
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" /><!-- JQuery UI CSS -->
-  <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script><!-- JQuery UI CDN -->
-
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+  
 
 <!-- View a message on it's own with the possibility of deleting it -->
 <script>
 function viewIndividualMessage(messageID)
 {
+	//GET /messsages/id
 	location.href="${pageContext.request.contextPath}/messages/" + messageID;
 }
 </script>
 
 <!-- Use JQuery AJAX to HTTP DELETE to /profile in order to delete your profile -->
 <script>
-$(document).ready(function(){    
-	$("p#delete").click(function() {
-		var result = window.confirm("You are about to delete your profile.\nAre you sure?\nYou'll miss out...");
-		if (result)
+$(document).ready(function()
+{    
+	$("p#delete").click(function() 
+	{
+		$( "#dialog-confirm" ).dialog(
 		{
-			//Call AJAX Delete
-			alert("Deleting profile");
-			$.ajax({
-			  url: "${pageContext.request.contextPath}/profile",
-			  type: "DELETE",
-			}).done(function(data) {
-				
-				$( "#dialog" ).dialog({
-			        modal: true,
-			        buttons: {
-				        Ok: function() {
-				          $( this ).dialog( "close" );
-				        }
-			        }
-				});
-				location.href = "${pageContext.request.contextPath}/login";
-			});
-		}
-		else
-			return;		
+		    resizable: false,
+		    modal: true,
+		    buttons: 
+		    {
+		        "Pull the plug": function() 
+				{
+		          $( this ).dialog( "close" );
+		          alert("do ajax");
+                  return;
+		        },
+		        "On second thought...": function() {
+		          $( this ).dialog( "close" );
+                    alert("return");
+		          return;
+		        }
+		    }
+		});
+		
 	});
 });
 </script>
@@ -94,7 +94,11 @@ function fadeMessagesIn()
 			<div class="profileContainer">
 	
 				<!--  content -->
-				<h1> ${user.firstName} </h1> <p id="delete"><a href=""></a>(Delete?)</p>
+				<h1> ${user.firstName} </h1> 
+				
+				<c:if test="${otherUser != true}">
+					<p id="delete">(Delete?)</p>
+				</c:if>
 				
 				<div id="profilePicture">
 					<img src="${pageContext.request.contextPath}/images/blank_profile.png" alt="Blank Profile Picture"/>
@@ -165,10 +169,13 @@ function fadeMessagesIn()
 		
 		
 		
-	<div id="#dialog" hidden="true">
-		<p>Profile Deleted</p>
-	</div>	
-		
+		<div id="#dialog" >
+			<p></p>
+		</div>	
+			
+		<div id="#dialog-confirm" hidden="true">
+			<p>Are you sure you want to delete your profile? You'll miss out...</p>
+		</div>
 	</div>
 
 <jsp:include page="/footer.jsp" />

@@ -26,20 +26,26 @@ $(document).ready(function(){
 		$.ajax({
 		  url: "${pageContext.request.contextPath}/messages/${message.id}",
 		  type: "DELETE",
-		}).done(function(data) {
-			$( "#dialog" ).dialog({
-		        modal: true,
-		        buttons: {
-			        Ok: function() {
-			          $( this ).dialog( "close" );
+		  dataType: 'text',
+		  success: function( response ) {
+	            $( "#dialog > p").html( response );
+
+	            $( "#dialog").dialog({
+			        modal: true,
+			        buttons: {
+			        	Ok: function() {
+			                $( this ).dialog( "close" );
+			                location.href = "${pageContext.request.contextPath}/profile";
+			              }
 			        }
-		        }
-			});
-			location.href = "${pageContext.request.contextPath}/profile";
+				});
+	        },
 		});
+			
 	});
 });
 </script>
+
 
 
 </head>
@@ -69,7 +75,7 @@ $(document).ready(function(){
 	    
 	    <c:if test="${ message.author.email == user.email }">
 	    	<!-- Only deletable if it's your own message -->
-	    	<button class="greybutton" id="messageButton" name="delete"> <img id="deleteImage" src="${pageContext.request.contextPath}/images/delete.png">Delete </button>
+	    	<button class="greybutton" id="deleteButton" name="delete"> <img id="deleteImage" src="${pageContext.request.contextPath}/images/delete.png"></button>
 	    </c:if>
 	
 		
@@ -77,7 +83,7 @@ $(document).ready(function(){
 		
 		
 		<div id="dialog" title="Deleted">
-			<p> Message deleted! </p>
+			<p> </p>
 		</div>
 
 	</div>

@@ -83,7 +83,7 @@ public class FollowingServlet extends HttpServlet
 		//Add user to friends table
 		friendService.addFollowing(user.getEmail(), userToFollow);
 		request.setAttribute("returnMessage", "You are now following " + userToFollow);
-
+		
 		response.sendRedirect(request.getContextPath() + "/following");
 	}
 
@@ -101,16 +101,15 @@ public class FollowingServlet extends HttpServlet
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		String uri = request.getRequestURI();
+		response.setContentType("text/plain");
 		//Stop following user - Delete row in friends table
 		int lastSeparator = uri.lastIndexOf('/');
 		String followingToDelete = uri.substring(lastSeparator + 1);
-			//TODO: Remove debug
-			System.out.println("Attempting to delete " + followingToDelete);
 		
 		friendService.deleteFollowing(user.getEmail(), followingToDelete);
 		
-		request.setAttribute("deleteMessage", "You've stopped following " + followingToDelete);
-		response.sendRedirect(request.getContextPath() + "/following");
+		//request.setAttribute("deleteMessage", "You've stopped following " + followingToDelete);
+		response.getWriter().println("You've stopped following " + followingToDelete);
 
 
 	}

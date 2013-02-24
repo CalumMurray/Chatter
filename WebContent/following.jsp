@@ -33,22 +33,38 @@ $('.friendEmail').tooltip( {
 
 <!-- AJAX call with JQuery to use HTTP DELETE method to delete stop following a user -->
 <script>
-$(document).ready(function(){
+$(document).ready(function(){    
 	$("button[name='delete']").click(function() {
 		var buttonText = $(this).text();
 		var email = buttonText.substring(buttonText.lastIndexOf(' ') + 1, buttonText.length);
 		$.ajax({
-		  url: "${pageContext.request.contextPath}/following" + email,
+		  url: "${pageContext.request.contextPath}/following/" + email,
 		  type: "DELETE",
-		}).done(function() {
-			$("#dialog").dialog();
+		  dataType: 'text',
+		  success: function( response ) {
+	            $( "#dialog > p").html( response );
+
+	            $( "#dialog").dialog({
+			        modal: true,
+			        buttons: {
+			        	Ok: function() {
+			                $( this ).dialog( "close" );
+			                location.href = "${pageContext.request.contextPath}/following";
+			              }
+			        }
+				});
+	        },
 		});
+			
 	});
 });
 
 </script>
 
-<!-- Dynamically make hidden form to POST user to start following, to servlet -->
+
+
+<!-- 
+<!-- Dynamically make hidden form to POST user to start following, to servlet 
 <script>
 function addFollowing(userToFollow) {
 	//MNake hidden form
@@ -67,7 +83,7 @@ function addFollowing(userToFollow) {
     form.submit();
 }
 
-</script>
+</script> -->
 </head>
 <body>
 
@@ -91,8 +107,8 @@ function addFollowing(userToFollow) {
 				<p id="returnMessage"><c:out value="${failureMessage}" /></p>
 			</c:if>
 			
-			<c:if test="${deleteMessage != null}">
-				<p id="returnMessage"><c:out value="${deleteMessage}" /></p>
+			<c:if test="${returnMessage != null}">
+				<p id="returnMessage"><c:out value="${returnMessage}" /></p>
 			</c:if>
 					    
 			<!--  List friends -->
@@ -105,9 +121,10 @@ function addFollowing(userToFollow) {
 			    		<div id="friendOptions">
 				    		<c:choose>
 					    		<c:when test="${currentUser.friend == false}">
-					    			<form method="POST" >
+					    			<!-- POST To start following user -->
+					    			<form method="POST" >	
 					    				<input type="hidden" name="userToFollow" value="${currentUser.email}" />
-					    				<input type="submit" class="orangebutton" id="friendButton" value="Follow" />	<!--  POST via javascript "addFollowing" function-->
+					    				<input type="submit" class="orangebutton" id="friendButton" value="Follow" />
 					    			</form>
 				    			</c:when>
 				    			<c:otherwise>
@@ -122,6 +139,9 @@ function addFollowing(userToFollow) {
 			
 		</div>
 		
+		<div id="dialog">
+			<p> </p> 
+		</div>
 		
 		<!-- <h1>Add more friends</h1>
 		<hr />
